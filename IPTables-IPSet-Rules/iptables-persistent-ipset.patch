@@ -1,0 +1,39 @@
+--- iptables-persistent	2016-01-25 02:26:50.000000000 -0500
++++ iptables-persistent-ipset	2016-01-25 02:22:24.000000000 -0500
+@@ -25,6 +25,17 @@
+ {
+ 	log_action_begin_msg "Loading iptables rules"
+ 
++	#load IPsets
++	if [ ! -f /etc/iptables/rules.ipsets ]; then
++	  log_action_cont_msg " skipping IPsets (no rules to load)"
++	else
++	  log_action_cont_msg " IPset"
++	  ipset restore -! < /etc/iptables/rules.ipsets 2> /dev/null
++	  if [ $? -ne 0 ]; then
++	   rc=1
++	  fi
++	fi
++
+ 	#load IPv4 rules
+ 	if [ ! -f /etc/iptables/rules.v4 ]; then
+ 		log_action_cont_msg " skipping IPv4 (no rules to load)"
+@@ -54,6 +65,18 @@
+ {
+ 	log_action_begin_msg "Saving rules"
+ 
++	#save IPsets
++	#need at least iptable_filter loaded:
++	if ! ipset list | grep -i "name">/dev/null 2>&1; then
++	  log_action_cont_msg " skipping IPset - no sets defined or not loaded"
++	elif [ -x /usr/sbin/ipset ] || [ -x /sbin/ipset ]; then
++	  log_action_cont_msg " IPset"
++	  ipset save | grep -iv "f2b"> /etc/iptables/rules.ipsets
++	  if [ $? -ne 0 ]; then
++	    rc=1
++	  fi
++	fi
++
+ 	#save IPv4 rules
+ 	#need at least iptable_filter loaded:
+ 	/sbin/modprobe -q iptable_filter
