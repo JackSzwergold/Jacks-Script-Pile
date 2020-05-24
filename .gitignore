@@ -1,0 +1,3 @@
+# Ignore OS specific cruft.
+.DS_Store
+Thumbs.db

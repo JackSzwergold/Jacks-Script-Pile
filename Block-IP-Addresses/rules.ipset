@@ -1,0 +1,10 @@
+create TOR_IPS hash:net family inet hashsize 2048 maxelem 65536 timeout 86400
+create BANNED_RANGES hash:net family inet hashsize 16384 maxelem 65536 timeout 86400
+create BANNED_IPS hash:net family inet hashsize 2048 maxelem 65536 timeout 86400
+create WHITELIST_IPS hash:net family inet hashsize 2048 maxelem 65536 timeout 86400
+create AMAZON_RANGES hash:net family inet hashsize 1024 maxelem 65536 timeout 86400
+create MICROSOFT_RANGES hash:net family inet hashsize 1024 maxelem 65536 timeout 86400
+create DIGITALOCEAN_RANGES hash:net family inet hashsize 1024 maxelem 65536 timeout 86400
+create ONLINESAS_RANGES hash:net family inet hashsize 1024 maxelem 65536 timeout 86400
+create FACEBOOK_RANGES hash:net family inet hashsize 1024 maxelem 65536 timeout 86400
+create GOOGLE_RANGES hash:net family inet hashsize 1024 maxelem 65536 timeout 86400

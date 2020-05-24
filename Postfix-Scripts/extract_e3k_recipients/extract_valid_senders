@@ -1,0 +1,6 @@
+#!/bin/bash
+# Extract all Adresses that start with SMTP from an Active Directory 
+# export, but omit those that are listed in blacklist
+cat $1 | tr -d \" | tr , \\n| tr \; \\n | awk -F\: '/SMTP:/ {printf("%s\tOK\n",$2)}' |
+grep -v -f blacklist > $2
+
