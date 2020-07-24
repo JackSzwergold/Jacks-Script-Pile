@@ -1,6 +1,6 @@
 #!/bin/bash -l
 
-################################################################################
+##########################################################################################
 #
 # GeoIP Updates (geoip_updates.sh) (c) by Jack Szwergold
 #
@@ -95,14 +95,17 @@ if mkdir ${lock_directory} 2>/dev/null; then
 
   ##############################################################################
   # Get the GeoIP Country CSV data.
-  wget -N -q ${GEOIP_COUNTRY_CSV_URL} -O ${GEOIP_DIRECTORY}GeoIPCountryCSV.zip >/dev/null & GEOIP_COUNTRY_CSV_PID=`jobs -l | awk '{print $2}'`;
+  wget -N -q ${GEOIP_COUNTRY_CSV_URL} -O ${GEOIP_DIRECTORY}GeoIP-legacy.csv.gz >/dev/null & GEOIP_COUNTRY_CSV_PID=`jobs -l | awk '{print $2}'`;
   wait ${GEOIP_COUNTRY_CSV_PID};
 
-  if [ -s ${GEOIP_DIRECTORY}GeoIPCountryCSV.zip ]; then
-    unzip -o -q -d ${GEOIP_DIRECTORY} ${GEOIP_DIRECTORY}GeoIPCountryCSV.zip >/dev/null & GZIP_PID=`jobs -l | awk '{print $2}'`;
+  if [ -s ${GEOIP_DIRECTORY}GeoIP-legacy.csv.gz ]; then
+    gzip -df ${GEOIP_DIRECTORY} ${GEOIP_DIRECTORY}GeoIP-legacy.csv.gz >/dev/null & GZIP_PID=`jobs -l | awk '{print $2}'`;
     wait ${GZIP_PID};
 
-    rm -f ${GEOIP_DIRECTORY}GeoIPCountryCSV.zip
+    mv -f ${GEOIP_DIRECTORY}GeoIP-legacy.csv ${GEOIP_DIRECTORY}GeoIPCountryWhois.csv >/dev/null & MOVE_GEOIP_COUNTRY_PID=`jobs -l | awk '{print $2}'`;
+    wait ${MOVE_GEOIP_COUNTRY_PID};
+
+    rm -f ${GEOIP_DIRECTORY}GeoIP-legacy.csv.gz
   fi
 
   ##############################################################################
@@ -146,3 +149,4 @@ fi
 ################################################################################
 # And that’s all there is!
 exit
+
