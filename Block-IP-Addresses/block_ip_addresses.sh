@@ -293,7 +293,7 @@ if mkdir ${lock_directory} 2>/dev/null; then
 
     ############################################################################
     # Use AWK to create the IPSet config file.
-    awk -v IPSET_TIMEOUT="${IPSET_TIMEOUT}" 'NF {print "add GOOGLE_RANGES " $0 " timeout " IPSET_TIMEOUT}' "${BASE_DIR}${SET_ASN_RANGES}.tmp" > "${BASE_DIR}rules.${SET_ASN_RANGES}.ipset";
+    awk -v IPSET_TIMEOUT="${IPSET_TIMEOUT}" 'NF {print "add ASN_RANGES " $0 " timeout " IPSET_TIMEOUT}' "${BASE_DIR}${SET_ASN_RANGES}.tmp" > "${BASE_DIR}rules.${SET_ASN_RANGES}.ipset";
 
   } # asn_ips_process
 
