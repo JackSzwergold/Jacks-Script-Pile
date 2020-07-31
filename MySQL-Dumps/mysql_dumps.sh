@@ -49,7 +49,7 @@ if mkdir ${LOCK_DIR} 2>/dev/null; then
   echo $$ > ${PID_FILE};
 
   # Dump the DBs
-  nice -n ${NICENESS} ${MYSQLDUMP_BINARY} --add-drop-table --user="root" --password="root" 'wordpress_dev_db' | gzip > $DATABASE_DUMP_DIRECTORY'/wordpress_dev_db'$SUFFIX'.sql.gz';
+  nice -n ${NICENESS} ${MYSQLDUMP_BINARY} --add-drop-table --no-tablespaces --user="root" --password="root" 'wordpress_dev_db' | gzip > $DATABASE_DUMP_DIRECTORY'/wordpress_dev_db'$SUFFIX'.sql.gz';
 
   # Find all Gzip backups that are older than the `EXPIRATION` number of days & remove them.
   # find $DATABASE_DUMP_DIRECTORY -maxdepth 1 -type f -mtime +$EXPIRATION -name "*.gz" -exec ls -latr {} \;
