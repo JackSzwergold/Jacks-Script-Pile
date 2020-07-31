@@ -424,5 +424,5 @@ else
 fi
 
 ################################################################################
-# And that’s all there is!
+# And that's all there is!
 exit
