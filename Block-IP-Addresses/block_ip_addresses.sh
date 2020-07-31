@@ -236,7 +236,7 @@ if mkdir ${lock_directory} 2>/dev/null; then
       :> "${BASE_DIR}${SET_MICROSOFT_RANGES}.xml";
 
       ##########################################################################
-      # Now, of course Microsoft doesn’t make things simple. So the URL has to be parsed to actually get the *final* URL.
+      # Now, of course Microsoft doesn't make things simple. So the URL has to be parsed to actually get the *final* URL.
       MICROSOFT_IP_RANGES_URL_FINAL=$(curl -Lfs "${MICROSOFT_IP_RANGES_URL}" | grep -Eoi '<a [^>]+>' | grep -Eo 'href="[^\"]+"' | grep "download.microsoft.com/download/" | grep -m 1 -Eo '(http|https)://[^"]+');
 
       ##########################################################################
