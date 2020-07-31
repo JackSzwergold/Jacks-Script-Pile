@@ -256,110 +256,42 @@ if mkdir ${lock_directory} 2>/dev/null; then
   } # microsoft_ips_process
 
   ##############################################################################
-  #  ____  _       _ _        _  ___
-  # |  _ \(_) __ _(_) |_ __ _| |/ _ \  ___ ___  __ _ _ __
-  # | | | | |/ _` | | __/ _` | | | | |/ __/ _ \/ _` | '_ \
-  # | |_| | | (_| | | || (_| | | |_| | (_|  __/ (_| | | | |
-  # |____/|_|\__, |_|\__\__,_|_|\___/ \___\___|\__,_|_| |_|
-  #          |___/
+  #     _    ____  _   _
+  #    / \  / ___|| \ | |
+  #   / _ \ \___ \|  \| |
+  #  / ___ \ ___) | |\  |
+  # /_/   \_\____/|_| \_|
   #
-  # Get the IP ranges based on Digital Ocean’s ASN number of AS14061.
+  # Get the IP ranges based on ASN numbers.
   #
   ##############################################################################
-  function digitalocean_ips_process () {
+  function asn_ips_process () {
 
     ############################################################################
     # Init temp files.
-    :> "${BASE_DIR}${SET_DIGITALOCEAN_RANGES}.tmp";
+    :> "${BASE_DIR}${SET_ASN_RANGES}.tmp";
 
     ############################################################################
-    # Get the list of DigitalOcean IP ranges from a WHOIS ASN lookup.
-    whois -h whois.radb.net -- '-i origin AS14061' | grep 'route:' | grep -oE '(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\/?([0-9]{1,2})?' | sort | uniq > "${BASE_DIR}${SET_DIGITALOCEAN_RANGES}.tmp";
+    # Google.
+    whois -h whois.radb.net -- '-i origin AS15169' | grep 'route:' | grep -oE '(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\/?([0-9]{1,2})?' | sort | uniq >> "${BASE_DIR}${SET_ASN_RANGES}.tmp";
 
     ############################################################################
-    # Use AWK to create the IPSet config file.
-    awk -v IPSET_TIMEOUT="${IPSET_TIMEOUT}" 'NF {print "add DIGITALOCEAN_RANGES " $0 " timeout " IPSET_TIMEOUT}' "${BASE_DIR}${SET_DIGITALOCEAN_RANGES}.tmp" > "${BASE_DIR}rules.${SET_DIGITALOCEAN_RANGES}.ipset";
-
-  } # digitalocean_ips_process
-
-  ##############################################################################
-  #   ___        _ _              ____    _    ____
-  #  / _ \ _ __ | (_)_ __   ___  / ___|  / \  / ___|
-  # | | | | '_ \| | | '_ \ / _ \ \___ \ / _ \ \___ \
-  # | |_| | | | | | | | | |  __/  ___) / ___ \ ___) |
-  #  \___/|_| |_|_|_|_| |_|\___| |____/_/   \_\____/
-  #
-  # Get the IP ranges based on Online SAS’s ASN number of AS12876.
-  #
-  ##############################################################################
-  function onlinesas_ips_process () {
+    # Facebook.
+    whois -h whois.radb.net -- '-i origin AS32934' | grep 'route:' | grep -oE '(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\/?([0-9]{1,2})?' | sort | uniq >> "${BASE_DIR}${SET_ASN_RANGES}.tmp";
 
     ############################################################################
-    # Init temp files.
-    :> "${BASE_DIR}${SET_ONLINESAS_RANGES}.tmp";
+    # Online SAS.
+    whois -h whois.radb.net -- '-i origin AS12876' | grep 'route:' | grep -oE '(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\/?([0-9]{1,2})?' | sort | uniq >> "${BASE_DIR}${SET_ASN_RANGES}.tmp";
 
     ############################################################################
-    # Get the list of DigitalOcean IP ranges from a WHOIS ASN lookup.
-    whois -h whois.radb.net -- '-i origin AS12876' | grep 'route:' | grep -oE '(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\/?([0-9]{1,2})?' | sort | uniq > "${BASE_DIR}${SET_ONLINESAS_RANGES}.tmp";
+    # DigitalOcean.
+    whois -h whois.radb.net -- '-i origin AS14061' | grep 'route:' | grep -oE '(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\/?([0-9]{1,2})?' | sort | uniq >> "${BASE_DIR}${SET_ASN_RANGES}.tmp";
 
     ############################################################################
     # Use AWK to create the IPSet config file.
-    awk -v IPSET_TIMEOUT="${IPSET_TIMEOUT}" 'NF {print "add ONLINESAS_RANGES " $0 " timeout " IPSET_TIMEOUT}' "${BASE_DIR}${SET_ONLINESAS_RANGES}.tmp" > "${BASE_DIR}rules.${SET_ONLINESAS_RANGES}.ipset";
+    awk -v IPSET_TIMEOUT="${IPSET_TIMEOUT}" 'NF {print "add GOOGLE_RANGES " $0 " timeout " IPSET_TIMEOUT}' "${BASE_DIR}${SET_ASN_RANGES}.tmp" > "${BASE_DIR}rules.${SET_ASN_RANGES}.ipset";
 
-  } # onlinesas_ips_process
-
-  ##############################################################################
-  #  _____              _                 _
-  # |  ___|_ _  ___ ___| |__   ___   ___ | | __
-  # | |_ / _` |/ __/ _ \ '_ \ / _ \ / _ \| |/ /
-  # |  _| (_| | (_|  __/ |_) | (_) | (_) |   <
-  # |_|  \__,_|\___\___|_.__/ \___/ \___/|_|\_\
-  #
-  # Get the IP ranges based on Facebook’s ASN number of AS32934.
-  #
-  ##############################################################################
-  function facebook_ips_process () {
-
-    ############################################################################
-    # Init temp files.
-    :> "${BASE_DIR}${SET_FACEBOOK_RANGES}.tmp";
-
-    ############################################################################
-    # Get the list of DigitalOcean IP ranges from a WHOIS ASN lookup.
-    whois -h whois.radb.net -- '-i origin AS32934' | grep 'route:' | grep -oE '(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\/?([0-9]{1,2})?' | sort | uniq > "${BASE_DIR}${SET_FACEBOOK_RANGES}.tmp";
-
-    ############################################################################
-    # Use AWK to create the IPSet config file.
-    awk -v IPSET_TIMEOUT="${IPSET_TIMEOUT}" 'NF {print "add FACEBOOK_RANGES " $0 " timeout " IPSET_TIMEOUT}' "${BASE_DIR}${SET_FACEBOOK_RANGES}.tmp" > "${BASE_DIR}rules.${SET_FACEBOOK_RANGES}.ipset";
-
-  } # facebook_ips_process
-
-  ##############################################################################
-  #   ____                   _
-  #  / ___| ___   ___   __ _| | ___
-  # | |  _ / _ \ / _ \ / _` | |/ _ \
-  # | |_| | (_) | (_) | (_| | |  __/
-  #  \____|\___/ \___/ \__, |_|\___|
-  #                    |___/
-  #
-  # Get the IP ranges based on Google’s ASN number of AS15169.
-  #
-  ##############################################################################
-  function google_ips_process () {
-
-    ############################################################################
-    # Init temp files.
-    :> "${BASE_DIR}${SET_ONLINESAS_RANGES}.tmp";
-
-    ############################################################################
-    # Get the list of DigitalOcean IP ranges from a WHOIS ASN lookup.
-    whois -h whois.radb.net -- '-i origin AS15169' | grep 'route:' | grep -oE '(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\/?([0-9]{1,2})?' | sort | uniq > "${BASE_DIR}${SET_ONLINESAS_RANGES}.tmp";
-
-    ############################################################################
-    # Use AWK to create the IPSet config file.
-    awk -v IPSET_TIMEOUT="${IPSET_TIMEOUT}" 'NF {print "add GOOGLE_RANGES " $0 " timeout " IPSET_TIMEOUT}' "${BASE_DIR}${SET_ONLINESAS_RANGES}.tmp" > "${BASE_DIR}rules.${SET_ONLINESAS_RANGES}.ipset";
-
-  } # google_ips_process
+  } # asn_ips_process
 
   ##############################################################################
   # __        ___     _ _       _ _     _
@@ -445,10 +377,7 @@ if mkdir ${lock_directory} 2>/dev/null; then
   geoip_country_process;
   amazon_ips_process;
   microsoft_ips_process;
-  digitalocean_ips_process;
-  onlinesas_ips_process;
-  facebook_ips_process;
-  google_ips_process;
+  asn_ips_process;
   whitelist_ips_process;
   load_ipset_process;
 

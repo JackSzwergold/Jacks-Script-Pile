@@ -28,10 +28,7 @@ COMMIT
 :TOR_ACTIONS - [0:0]
 :AMAZON_ACTIONS - [0:0]
 :MICROSOFT_ACTIONS - [0:0]
-:DIGITALOCEAN_ACTIONS - [0:0]
-:ONLINESAS_ACTIONS - [0:0]
-:FACEBOOK_ACTIONS - [0:0]
-:GOOGLE_ACTIONS - [0:0]
+:ASN_ACTIONS - [0:0]
 -A INPUT -i lo -j ACCEPT
 -A INPUT -p tcp -m set --match-set WHITELIST_IPS src -j ACCEPT
 -A INPUT -p tcp -m set --match-set BANNED_RANGES src -j BANNED_ACTIONS
@@ -39,10 +36,7 @@ COMMIT
 -A INPUT -p tcp -m set --match-set TOR_IPS src -j TOR_ACTIONS
 -A INPUT -p tcp -m set --match-set AMAZON_RANGES src -j AMAZON_ACTIONS
 -A INPUT -p tcp -m set --match-set MICROSOFT_RANGES src -j MICROSOFT_ACTIONS
--A INPUT -p tcp -m set --match-set DIGITALOCEAN_RANGES src -j DIGITALOCEAN_ACTIONS
--A INPUT -p tcp -m set --match-set ONLINESAS_RANGES src -j ONLINESAS_ACTIONS
--A INPUT -p tcp -m set --match-set FACEBOOK_RANGES src -j FACEBOOK_ACTIONS
--A INPUT -p tcp -m set --match-set GOOGLE_RANGES src -j GOOGLE_ACTIONS
+-A INPUT -p tcp -m set --match-set ASN_RANGES src -j ASN_ACTIONS
 -A INPUT -j DDOS_DETECT
 -A INPUT -j SPOOF_DETECT
 -A INPUT -p tcp -m state --state NEW -m tcp -m multiport --dports 80,443 -j ACCEPT
@@ -113,17 +107,8 @@ COMMIT
 # Define the MICROSOFT actions.
 -A MICROSOFT_ACTIONS -j REJECT --reject-with icmp-host-prohibited
 
-# Define the DIGITALOCEAN actions.
--A DIGITALOCEAN_ACTIONS -j REJECT --reject-with icmp-host-prohibited
-
-# Define the ONLINESAS actions.
--A ONLINESAS_ACTIONS -j REJECT --reject-with icmp-host-prohibited
-
-# Define the FACEBOOK actions.
--A FACEBOOK_ACTIONS -j REJECT --reject-with icmp-host-prohibited
-
-# Define the GOOGLE actions.
--A GOOGLE_ACTIONS -j REJECT --reject-with icmp-host-prohibited
+# Define the ASN actions.
+-A ASN_ACTIONS -j REJECT --reject-with icmp-host-prohibited
 
 # Commit it.
 COMMIT
