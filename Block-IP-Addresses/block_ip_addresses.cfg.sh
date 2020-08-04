@@ -91,3 +91,12 @@ COUNTRY_ARRAY[5]='VN'; # Vietnam
 COUNTRY_ARRAY[6]='KR'; # South Korea
 COUNTRY_ARRAY[7]='IR'; # Iran
 COUNTRY_ARRAY[8]='HK'; # Hong Kong
+
+################################################################################
+# Set a country array.
+ASN_ARRAY=();
+ASN_ARRAY[0]='AS15169'; # Google
+ASN_ARRAY[1]='AS32934'; # Facebook
+ASN_ARRAY[2]='AS12876'; # Online SAS
+ASN_ARRAY[3]='AS14061'; # DigitalOcean
+ASN_ARRAY[4]='AS49505'; # Selectel

@@ -271,29 +271,22 @@ if mkdir ${lock_directory} 2>/dev/null; then
     # Init temp files.
     :> "${BASE_DIR}${SET_ASN_RANGES}.tmp";
 
-    ############################################################################
-    # Google (AS15169).
-    whois -h whois.radb.net -- '-i origin AS15169' | grep 'route:' | grep -oE '(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\/?([0-9]{1,2})?' | sort | uniq >> "${BASE_DIR}${SET_ASN_RANGES}.tmp";
+    ##########################################################################
+    # If the IPSet file exists, do something.
+    if [ -f "${BASE_DIR}${SET_ASN_RANGES}.tmp" ]; then
 
-    ############################################################################
-    # Facebook (AS32934).
-    whois -h whois.radb.net -- '-i origin AS32934' | grep 'route:' | grep -oE '(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\/?([0-9]{1,2})?' | sort | uniq >> "${BASE_DIR}${SET_ASN_RANGES}.tmp";
+      ########################################################################
+      # Roll through the array of country codes and use AWK to create the BANNED IPSet config file.
+      for ASN_CODE in "${ASN_ARRAY[@]}"
+      do
+        whois -h whois.radb.net -- '-i origin '${ASN_CODE} | grep 'route:' | grep -oE '(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\/?([0-9]{1,2})?' | sort | uniq >> "${BASE_DIR}${SET_ASN_RANGES}.tmp";
+      done
 
-    ############################################################################
-    # Online SAS (AS12876).
-    whois -h whois.radb.net -- '-i origin AS12876' | grep 'route:' | grep -oE '(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\/?([0-9]{1,2})?' | sort | uniq >> "${BASE_DIR}${SET_ASN_RANGES}.tmp";
+      ############################################################################
+      # Use AWK to create the IPSet config file.
+      awk -v IPSET_TIMEOUT="${IPSET_TIMEOUT}" 'NF {print "add ASN_RANGES " $0 " timeout " IPSET_TIMEOUT}' "${BASE_DIR}${SET_ASN_RANGES}.tmp" > "${BASE_DIR}rules.${SET_ASN_RANGES}.ipset";
 
-    ############################################################################
-    # DigitalOcean (AS14061).
-    whois -h whois.radb.net -- '-i origin AS14061' | grep 'route:' | grep -oE '(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\/?([0-9]{1,2})?' | sort | uniq >> "${BASE_DIR}${SET_ASN_RANGES}.tmp";
-
-    ############################################################################
-    # Selectel (AS49505).
-    whois -h whois.radb.net -- '-i origin AS49505' | grep 'route:' | grep -oE '(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\/?([0-9]{1,2})?' | sort | uniq >> "${BASE_DIR}${SET_ASN_RANGES}.tmp";
-
-    ############################################################################
-    # Use AWK to create the IPSet config file.
-    awk -v IPSET_TIMEOUT="${IPSET_TIMEOUT}" 'NF {print "add ASN_RANGES " $0 " timeout " IPSET_TIMEOUT}' "${BASE_DIR}${SET_ASN_RANGES}.tmp" > "${BASE_DIR}rules.${SET_ASN_RANGES}.ipset";
+    fi
 
   } # asn_ips_process
 
