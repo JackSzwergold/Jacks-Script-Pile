@@ -91,6 +91,8 @@ COUNTRY_ARRAY[5]='VN'; # Vietnam
 COUNTRY_ARRAY[6]='KR'; # South Korea
 COUNTRY_ARRAY[7]='IR'; # Iran
 COUNTRY_ARRAY[8]='HK'; # Hong Kong
+COUNTRY_ARRAY[9]='LT'; # Lithuania
+COUNTRY_ARRAY[10]='MD'; # Lithuania
 
 ################################################################################
 # Set a country array.
@@ -101,3 +103,6 @@ ASN_ARRAY[2]='AS12876'; # Online SAS
 ASN_ARRAY[3]='AS14061'; # DigitalOcean
 ASN_ARRAY[4]='AS49505'; # Selectel
 ASN_ARRAY[5]='AS21859'; # Zenlayer
+ASN_ARRAY[6]='AS174'; # Cogent
+ASN_ARRAY[7]='AS237'; # Merit
+ASN_ARRAY[8]='AS398324'; # Censys
