@@ -92,7 +92,7 @@ COUNTRY_ARRAY[6]='KR'; # South Korea
 COUNTRY_ARRAY[7]='IR'; # Iran
 COUNTRY_ARRAY[8]='HK'; # Hong Kong
 COUNTRY_ARRAY[9]='LT'; # Lithuania
-COUNTRY_ARRAY[10]='MD'; # Lithuania
+COUNTRY_ARRAY[10]='MD'; # Moldova
 
 ################################################################################
 # Set a country array.
