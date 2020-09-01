@@ -106,3 +106,4 @@ ASN_ARRAY[5]='AS21859'; # Zenlayer
 ASN_ARRAY[6]='AS174'; # Cogent
 ASN_ARRAY[7]='AS237'; # Merit
 ASN_ARRAY[8]='AS398324'; # Censys
+ASN_ARRAY[9]='AS398722'; # Censys
